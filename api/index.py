@@ -1,6 +1,5 @@
 """
 Vercel serverless function for Flask web panel
-Simple WSGI adapter for Vercel
 """
 import sys
 import os
@@ -12,3 +11,4 @@ from web_panel import app
 
 # Vercel expects the Flask app to be exported
 # It will automatically handle WSGI conversion
+

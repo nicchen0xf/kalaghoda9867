@@ -1,49 +1,77 @@
-# Emote Bot - Backend & Frontend
+# Frontend - Web Panel (Vercel)
 
-This project is split into two parts:
+This folder contains the web panel frontend that runs on Vercel. By default it targets the backend at `http://217.154.173.102:9246` (Wispbyte instance). Override with the `BACKEND_API_URL` environment variable if you host the backend elsewhere.
 
-## 📁 Project Structure
+## Files
 
-- **`backend/`** - Bot API server (deploy anywhere: Orihost, Railway, Render, VPS, etc.)
-- **`frontend/`** - Web panel (deploy to Vercel)
+- `web_panel.py` - Flask web application
+- `templates/` - HTML templates
+- `public/images/` - Static images (317 PNG files) - **Vercel serves these automatically**
+- `api/index.py` - Vercel serverless function entry point
+- `vercel.json` - Vercel configuration
 
-## 🚀 Quick Start
+## Setup for Vercel
 
-### Backend Setup
+### 1. Install Vercel CLI
 
 ```bash
-cd backend
-pip install -r requirements.txt
-python main.py
+npm install -g vercel
 ```
 
-### Frontend Setup (Vercel)
+### 2. Login to Vercel
 
 ```bash
-cd frontend
+vercel login
+```
+
+### 3. Deploy
+
+```bash
 vercel
-vercel env add BACKEND_API_URL  # Set to http://217.154.173.102:9246 (or your backend URL)
+```
+
+### 4. Set Environment Variable
+
+Set the backend API URL:
+
+```bash
+vercel env add BACKEND_API_URL
+# Enter: http://YOUR_BACKEND_IP:PORT
+# Example (Wispbyte): http://217.154.173.102:9246
+# Select: Production, Preview, Development
+```
+
+### 5. Deploy to Production
+
+```bash
 vercel --prod
 ```
 
-## 📖 Full Documentation
+## Important Notes
 
-- **Backend**: See `backend/README.md`
-- **Frontend**: See `frontend/README.md`
-- **Deployment**: See `DEPLOYMENT_GUIDE.md`
+- **Images**: All images in `public/images/` are automatically served by Vercel
+- **Backend URL**: Set `BACKEND_API_URL` environment variable to your backend server
+- **Public Folder**: Vercel automatically serves files from the `public/` folder
+- **Image Paths**: Images are accessed as `/images/909000075.png` (not `/static/images/...`)
 
-## ✅ What's Fixed
+## Testing
 
-- ✅ Images now in `frontend/public/images/` (Vercel serves automatically)
-- ✅ HTML template uses `/images/` paths (not `/static/images/`)
-- ✅ Backend and frontend separated
-- ✅ Backend can be hosted anywhere
-- ✅ Frontend optimized for Vercel
+After deployment, test an image:
+```
+https://your-project.vercel.app/images/909000075.png
+```
 
-## 🎯 Next Steps
+This should display the image directly.
 
-1. Deploy backend to your server (Orihost, Railway, etc.)
-2. Deploy frontend to Vercel
-3. Set `BACKEND_API_URL` environment variable in Vercel
-4. Done! 🎉
+## Troubleshooting
+
+**Images not showing?**
+- Check that images are in `public/images/` folder
+- Verify image paths in HTML use `/images/` (not `/static/images/`)
+- Check Vercel deployment logs
+
+**API connection errors?**
+- Verify `BACKEND_API_URL` is set correctly
+- Check backend server is running and accessible
+- Test backend API: `curl http://YOUR_BACKEND_IP:PORT/status`
 

@@ -1,16 +1,14 @@
-# Python
+# Python caches and environments
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
-.Python
 env/
 venv/
 ENV/
-.venv
+.venv/
 
-# Config files (sensitive - don't commit account credentials!)
-config/accounts_*.json
+# Vercel local state
+.vercel/
 
 # IDE
 .vscode/
@@ -18,20 +16,33 @@ config/accounts_*.json
 *.swp
 *.swo
 
-# OS
+# OS junk
 .DS_Store
 Thumbs.db
-
-# Vercel
-.vercel/
 
 # Logs
 *.log
 
-# Bot files (not needed for web panel deployment)
+# Backend / non-frontend assets (keep out of Vercel repo)
+backend/
+config/
+Pb2/
+static/
 main.py
 start.py
 xC4.py
 xHeaders.py
-Pb2/
+
+# Helper scripts/docs not needed for deployment
+FIX_AUTH.md
+FIX_IMAGES.md
+MOVE_TO_PUBLIC.md
+GIT_SETUP.md
+QUICK_START.md
+README_SETUP.md
+README_VERCEL.md
+SETUP_GIT.md
+setup_git.bat
+setup_git.ps1
+backend.zip
 

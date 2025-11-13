@@ -5,20 +5,14 @@ import os
 import sys
 from flask import Flask, render_template, request, flash, redirect, url_for, session
 
-app = Flask(__name__, static_folder='static', static_url_path='/static')
+# Flask app - no static folder needed, Vercel serves from public/
+app = Flask(__name__, template_folder='templates')
 app.secret_key = 'asuwishmynigga' 
 
-# Bot API URL - connects to main.py running on Orihost
-# For Vercel: Use Orihost IP address
-# For local/Orihost: Use localhost
-API_HOST = os.environ.get("API_HOST", "127.0.0.1")
-API_PORT = os.environ.get("API_PORT", "8080")
-# If ORIHOST_IP is set (for Vercel), use it; otherwise use API_HOST
-ORIHOST_IP = os.environ.get("ORIHOST_IP", None)
-if ORIHOST_IP:
-    BOT_API_URL = f"http://{ORIHOST_IP}:{API_PORT}/command"
-else:
-    BOT_API_URL = f"http://{API_HOST}:{API_PORT}/command"
+# Bot API URL - connects to backend API server
+# Set BACKEND_API_URL environment variable in Vercel (e.g., http://YOUR_SERVER_IP:PORT)
+BACKEND_API_URL = os.environ.get("BACKEND_API_URL", "http://217.154.173.102:9246")
+BOT_API_URL = f"{BACKEND_API_URL}/command"
 
 @app.route('/')
 def index():
@@ -131,7 +125,7 @@ def handle_action():
                 flash(f"Error from bot: {response.status_code} - {error_msg}", 'danger')
 
     except requests.exceptions.ConnectionError:
-        flash('Could not connect to the bot API. Is main.py running?', 'danger')
+        flash('Could not connect to the bot API. Is the backend server running?', 'danger')
     except (ValueError, json.JSONDecodeError) as e:
         flash(f'Invalid data provided: {e}', 'danger')
     except Exception as e:
@@ -147,46 +141,3 @@ def set_server():
         session['preferred_server'] = server
         return {'status': 'ok', 'server': server}
     return {'status': 'error', 'message': 'Invalid server'}, 400
-
-# Serve static files explicitly for Vercel
-@app.route('/static/<path:filename>')
-def serve_static(filename):
-    """Serve static files explicitly."""
-    return app.send_static_file(filename)
-
-if __name__ == '__main__':
-    import socket
-    import time
-    
-    port = int(os.environ.get('PORT', 5000))
-    host = os.environ.get('HOST', '0.0.0.0')
-    
-    print("Byte Force Bot Web Panel")
-    print(f"Open your web browser and go to http://{host}:{port}")
-    print("Make sure main.py is running first!")
-    
-    # Wait a moment for port to be available if it was recently used
-    max_retries = 5
-    for attempt in range(max_retries):
-        try:
-            # Check if port is available
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            result = sock.bind((host, port))
-            sock.close()
-            break
-        except OSError as e:
-            if attempt < max_retries - 1:
-                print(f"Port {port} not available, retrying in 2 seconds... (attempt {attempt + 1}/{max_retries})")
-                time.sleep(2)
-            else:
-                print(f"⚠️ Warning: Port {port} check failed, attempting to start anyway...")
-                break
-    
-    # Start Flask with optimized settings for production
-    try:
-        app.run(host=host, port=port, debug=False, use_reloader=False, threaded=True)
-    except OSError as e:
-        print(f"❌ Error binding to {host}:{port}: {e}")
-        print("This usually means the port is already in use.")
-        sys.exit(1)
