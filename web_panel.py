@@ -125,10 +125,13 @@ def handle_action():
                 flash(f"Error from bot: {response.status_code} - {error_msg}", 'danger')
 
     except requests.exceptions.ConnectionError:
+        print(f"[WEB_PANEL] Connection error calling backend at {BOT_API_URL}", file=sys.stderr, flush=True)
         flash('Could not connect to the bot API. Is the backend server running?', 'danger')
     except (ValueError, json.JSONDecodeError) as e:
+        print(f"[WEB_PANEL] Payload error: {e}", file=sys.stderr, flush=True)
         flash(f'Invalid data provided: {e}', 'danger')
     except Exception as e:
+        print(f"[WEB_PANEL] Unexpected error: {e}", file=sys.stderr, flush=True)
         flash(f'An unexpected error occurred: {e}', 'danger')
 
     return redirect(url_for('index'))
