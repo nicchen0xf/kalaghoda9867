@@ -5,7 +5,7 @@ import os
 import sys
 from flask import Flask, render_template, request, flash, redirect, url_for, session
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', static_url_path='/static')
 app.secret_key = 'asuwishmynigga' 
 
 # Bot API URL - connects to main.py running on Orihost
@@ -147,6 +147,12 @@ def set_server():
         session['preferred_server'] = server
         return {'status': 'ok', 'server': server}
     return {'status': 'error', 'message': 'Invalid server'}, 400
+
+# Serve static files explicitly for Vercel
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    """Serve static files explicitly."""
+    return app.send_static_file(filename)
 
 if __name__ == '__main__':
     import socket
