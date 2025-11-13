@@ -1,0 +1,15 @@
+# Ignore bot files (not needed for web panel)
+main.py
+start.py
+xC4.py
+xHeaders.py
+Pb2/
+config/
+*.pyc
+__pycache__/
+.git/
+.gitignore
+
+# Keep only what's needed for web panel
+# static/ and templates/ are needed
+

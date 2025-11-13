@@ -1,0 +1,5 @@
+# Use Git LFS for large image files
+static/images/*.png filter=lfs diff=lfs merge=lfs -text
+static/images/*.jpg filter=lfs diff=lfs merge=lfs -text
+static/images/*.jpeg filter=lfs diff=lfs merge=lfs -text
+static/images/*.gif filter=lfs diff=lfs merge=lfs -text

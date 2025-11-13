@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Config files (sensitive - don't commit account credentials!)
+config/accounts_*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel/
+
+# Logs
+*.log
+
+# Bot files (not needed for web panel deployment)
+main.py
+start.py
+xC4.py
+xHeaders.py
+Pb2/
+
